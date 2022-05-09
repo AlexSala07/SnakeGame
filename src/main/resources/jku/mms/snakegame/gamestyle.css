@@ -1,0 +1,18 @@
+* {
+    -background-color-primary-dark: #929292;
+    -background-color-primary: #4C4C4C;
+    -background-color-primary-light: #727272;
+    -background-color-accent: #191C22;
+    -text-color-primary: #C8C8C8;
+    -text-color-accent: #F2B03F;
+}
+
+.button {
+    -fx-font-size: 10pt;
+    -fx-background-color: -background-color-primary;
+    -fx-text-fill: -text-color-primary;
+}
+
+.borderPane {
+    -fx-background-color: -background-color-primary;
+}
