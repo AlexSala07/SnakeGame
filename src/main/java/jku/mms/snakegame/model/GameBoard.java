@@ -4,6 +4,10 @@ import javafx.scene.paint.Color;
 
 import static jku.mms.snakegame.model.Tile.TILE_SIZE;
 
+/**
+ * GameBoard is the class which represents the 2D map of the game grid.
+ * Each element of the board is represented as a Tile.
+ */
 public class GameBoard {
     private final int width;
     private final int height;
@@ -34,6 +38,10 @@ public class GameBoard {
         return foundTile;
     }
 
+    /**
+     * Sets every Tile of the board to a green colour making up the background.
+     * This method should be called when the GameBoard is created.
+     */
     private void setTileBackground() {
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getColumns(); j++) {
