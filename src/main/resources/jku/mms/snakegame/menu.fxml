@@ -21,10 +21,10 @@
 
 
     <Button onAction="#onMuteButtonClick" fx:id="muteButton">
-        <graphic>
+<!--        <graphic>
             <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@volume.png"/>
+                <Image/>
             </ImageView>
-        </graphic>
+        </graphic>-->
     </Button>
 </VBox>

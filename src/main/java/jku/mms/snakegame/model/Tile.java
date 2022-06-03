@@ -58,6 +58,9 @@ public class Tile {
             case DOUBLE_POINTS:
                 newCollectible = new DoublePoints(this);
                 break;
+            case WINE:
+                newCollectible = new Wine(this);
+                break;
         }
 
         this.collectible = newCollectible;
@@ -75,16 +78,6 @@ public class Tile {
 
     public Tile convertToStartType() {
         this.type = this.startType;
-        return this;
-    }
-
-    public Tile convertToBackGroundA() {
-        this.type = TyleType.BACKGROUND_A;
-        return this;
-    }
-
-    public Tile convertToBackGroundB() {
-        this.type = TyleType.BACKGROUND_B;
         return this;
     }
 

@@ -16,6 +16,9 @@ import java.util.Random;
 public class GameLoop implements Runnable {
     public final BooleanProperty running = new SimpleBooleanProperty();
     public final BooleanProperty snakeOnDoublePoints = new SimpleBooleanProperty();
+    public final BooleanProperty snakeDrunk = new SimpleBooleanProperty();
+    public final BooleanProperty snakeFaster = new SimpleBooleanProperty();
+    public final BooleanProperty snakeSlower = new SimpleBooleanProperty();
     private final GameController gameController;
     private final Painter painter;
     private boolean isKeyPressed = false;
@@ -58,16 +61,14 @@ public class GameLoop implements Runnable {
         }
 
         if (gameController.collisionDetected()) {
+            SoundEffectController.playDeadSound();
             running.set(false);
         }
 
-        if (gameController.snakeOnDoublePoints()) {
-            snakeOnDoublePoints.set(true);
-        }
-        else {
-            snakeOnDoublePoints.set(false);
-        }
-
+        snakeOnDoublePoints.set(gameController.isSnakeOnDoublePoints());
+        snakeDrunk.set(gameController.isSnakeDrunk());
+        snakeFaster.set(gameController.isSnakeFaster());
+        snakeSlower.set(gameController.isSnakeSlower());
 
         generateRandomExtraCollectibles();
         refreshUi();
@@ -76,7 +77,7 @@ public class GameLoop implements Runnable {
     }
 
     private void generateRandomExtraCollectibles() {
-        if (gameController.isSnakeOnEffect()) {
+        if (gameController.isSnakeOnSpeedEffect()) {
             return;
         }
 
@@ -90,6 +91,9 @@ public class GameLoop implements Runnable {
         if (random.nextInt(325) == 10) {
             gameController.generateRandomCollectible(CollectibleType.DOUBLE_POINTS);
         }
+        if (random.nextInt(250) == 10) {
+            gameController.generateRandomCollectible(CollectibleType.WINE);
+        }
     }
 
     public boolean getIsKeyPressed() { return this.isKeyPressed; }
@@ -97,8 +101,6 @@ public class GameLoop implements Runnable {
     public void setIsKeyPressed(boolean state) { this.isKeyPressed = state; }
 
     public GameController getGameController() { return this.gameController; }
-
-    public boolean isRunning() { return this.running.get(); }
 
     public void setRunning(boolean flag) { this.running.set(flag); }
 

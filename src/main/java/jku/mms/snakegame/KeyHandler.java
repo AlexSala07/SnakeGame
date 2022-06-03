@@ -1,6 +1,7 @@
 package jku.mms.snakegame;
 
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**
@@ -19,19 +20,39 @@ public class KeyHandler implements EventHandler<KeyEvent> {
             return;
         }
         gameLoop.setIsKeyPressed(true);
+        boolean isSnakeDrunk = gameLoop.snakeDrunk.get();
 
         switch (keyEvent.getCode()) {
             case W:
-                gameLoop.getGameController().moveSnakeUp();
+                if (isSnakeDrunk) {
+                    gameLoop.getGameController().moveSnakeDown();
+                } else {
+                    gameLoop.getGameController().moveSnakeUp();
+                }
                 break;
             case S:
-                gameLoop.getGameController().moveSnakeDown();
+                if (isSnakeDrunk) {
+                    gameLoop.getGameController().moveSnakeUp();
+                }
+                else {
+                    gameLoop.getGameController().moveSnakeDown();
+                }
                 break;
             case A:
-                gameLoop.getGameController().moveSnakeLeft();
+                if (isSnakeDrunk) {
+                    gameLoop.getGameController().moveSnakeRight();
+                }
+                else {
+                    gameLoop.getGameController().moveSnakeLeft();
+                }
                 break;
             case D:
-                gameLoop.getGameController().moveSnakeRight();
+                if (isSnakeDrunk) {
+                    gameLoop.getGameController().moveSnakeLeft();
+                }
+                else {
+                    gameLoop.getGameController().moveSnakeRight();
+                }
                 break;
         }
     }

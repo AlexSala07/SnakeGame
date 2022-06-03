@@ -1,5 +1,6 @@
 package jku.mms.snakegame.model;
 
+import jku.mms.snakegame.SoundEffectController;
 import jku.mms.snakegame.model.collectibles.Collectible;
 import jku.mms.snakegame.model.collectibles.CollectibleType;
 
@@ -9,14 +10,16 @@ import java.util.LinkedList;
  * Snake represents the snake object which moves through the GameBoard and can eat Collectibles.
  */
 public class Snake {
+    private static final int DEFAULT_SPEED = 10;
     private Tile head;
     private final LinkedList<Tile> body = new LinkedList<>();
     private Direction currentDirection = Direction.RIGHT;
     private final GameBoard gameBoard;
     private boolean collidedWithWall = false;
-    private int speed = 10;
+    private int speed = DEFAULT_SPEED;
     private int pointsMultiplier = 1;
-    private boolean isOnEffect = false;
+    private boolean isOnSpeedEffect = false;
+    private boolean isDrunk = false;
 
     public Snake(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
@@ -133,19 +136,28 @@ public class Snake {
 
     public void eat() {
         Collectible collectible = head.getCollectible();
-        if (collectible.getType().equals(CollectibleType.LIGHTNING) && !isOnEffect) {
+        if (collectible.getType().equals(CollectibleType.LIGHTNING) && !isOnSpeedEffect) {
+            SoundEffectController.playLightningSound();
             new Thread(new SpeedThread(speed, speed + 15, 5000)).start();
         }
 
-        if (collectible.getType().equals(CollectibleType.SNAIL) && !isOnEffect) {
+        if (collectible.getType().equals(CollectibleType.SNAIL) && !isOnSpeedEffect) {
+            SoundEffectController.playSnailSound();
             new Thread(new SpeedThread(speed, speed - 5, 5000)).start();
         }
 
         if (collectible.getType().equals(CollectibleType.DOUBLE_POINTS)) {
-            new Thread(new DoublePointsThread(pointsMultiplier, 2, 5000)).start();
+            SoundEffectController.playDoublePointsSound();
+            new Thread(new DoublePointsThread(5000)).start();
+        }
+
+        if (collectible.getType().equals(CollectibleType.WINE)) {
+            SoundEffectController.playDrunkSound();
+            new Thread(new DrunkThread(5000)).start();
         }
 
         if (collectible.getType().equals(CollectibleType.APPLE)) {
+            SoundEffectController.playAppleSound();
             switch (this.currentDirection) {
                 case UP:
                     body.add(gameBoard.getTile(head.getColumn(), head.getRow() + 1));
@@ -167,15 +179,21 @@ public class Snake {
 
     public int getSpeed() { return this.speed; }
 
-    public boolean isOnEffect() { return this.isOnEffect; }
+    public boolean isOnSpeedEffect() { return this.isOnSpeedEffect; }
 
     public int getPointsMultiplier() {
         return this.pointsMultiplier;
     }
 
     public boolean isOnDoublePoints() {
-        return pointsMultiplier > 1;
+        return pointsMultiplier == 2;
     }
+
+    public boolean isDrunk() { return isDrunk; }
+
+    public boolean isFaster() { return speed > DEFAULT_SPEED; }
+
+    public boolean isSlower() { return speed < DEFAULT_SPEED; }
 
     private class SpeedThread implements Runnable {
         private int oldSpeed;
@@ -193,21 +211,17 @@ public class Snake {
             long end = System.currentTimeMillis() + durationInMs;
             while (System.currentTimeMillis() < end) {
                 speed = newSpeed;
-                isOnEffect = true;
+                isOnSpeedEffect = true;
             }
             speed = oldSpeed;
-            isOnEffect = false;
+            isOnSpeedEffect = false;
         }
     }
 
     private class DoublePointsThread implements Runnable {
-        private int newPointsMultiplier;
-        private int oldPointsMultiplier;
         private int durationInMs;
 
-        DoublePointsThread(int oldPointsMultiplier, int newPointsMultiplier, int durationInMs) {
-            this.oldPointsMultiplier = oldPointsMultiplier;
-            this.newPointsMultiplier = newPointsMultiplier;
+        DoublePointsThread(int durationInMs) {
             this.durationInMs = durationInMs;
         }
 
@@ -215,9 +229,26 @@ public class Snake {
         public void run() {
             long end = System.currentTimeMillis() + durationInMs;
             while (System.currentTimeMillis() < end) {
-                pointsMultiplier = newPointsMultiplier;
+                pointsMultiplier = 2;
             }
-            pointsMultiplier = oldPointsMultiplier;
+            pointsMultiplier = 1;
+        }
+    }
+
+    private class DrunkThread implements Runnable {
+        private int durationInMs;
+
+        DrunkThread(int durationInMs) {
+            this.durationInMs = durationInMs;
+        }
+
+        @Override
+        public void run() {
+            long end = System.currentTimeMillis() + durationInMs;
+            while (System.currentTimeMillis() < end) {
+                isDrunk = true;
+            }
+            isDrunk = false;
         }
     }
 }

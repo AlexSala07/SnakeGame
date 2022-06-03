@@ -5,6 +5,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import jku.mms.snakegame.model.GameBoard;
 import jku.mms.snakegame.model.Snake;
+import jku.mms.snakegame.model.Tile;
+import jku.mms.snakegame.model.TyleType;
 import jku.mms.snakegame.model.collectibles.CollectibleType;
 
 import static jku.mms.snakegame.SingleplayerController.CANVAS_HEIGHT;
@@ -68,6 +70,11 @@ public class GameController {
             return;
         }
 
+        Tile tile;
+        do {
+            tile = this.gameBoard.getTile(gameBoard.getRandomCol(), gameBoard.getRandomRow());
+        } while (tile.getCollectible() != null && (tile.getType().equals(TyleType.BACKGROUND_A) || !tile.getType().equals(TyleType.BACKGROUND_B)));
+
         this.gameBoard.getTile(gameBoard.getRandomCol(), gameBoard.getRandomRow()).setCollectible(collectibleType);
     }
 
@@ -83,11 +90,23 @@ public class GameController {
         return snake.getSpeed();
     }
 
-    public boolean isSnakeOnEffect() {
-        return snake.isOnEffect();
+    public boolean isSnakeOnSpeedEffect() {
+        return snake.isOnSpeedEffect();
     }
 
-    public boolean snakeOnDoublePoints() {
+    public boolean isSnakeDrunk() {
+        return snake.isDrunk();
+    }
+
+    public boolean isSnakeOnDoublePoints() {
         return snake.isOnDoublePoints();
+    }
+
+    public boolean isSnakeFaster() {
+        return snake.isFaster();
+    }
+
+    public boolean isSnakeSlower() {
+        return snake.isSlower();
     }
 }

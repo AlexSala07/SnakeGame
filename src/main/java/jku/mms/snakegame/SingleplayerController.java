@@ -2,14 +2,12 @@ package jku.mms.snakegame;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -20,6 +18,7 @@ public class SingleplayerController implements Initializable {
     @FXML private Canvas gameCanvas;
     @FXML private Label scoreLabel;
     @FXML private Label timeLabel;
+    @FXML private HBox currentEffectsList;
 
     static final int CANVAS_WIDTH = 700;
     static final int CANVAS_HEIGHT = 500;
@@ -39,6 +38,9 @@ public class SingleplayerController implements Initializable {
 
         addGameRunningCheck();
         addSnakeOnDoublePointsCheck();
+        addSnakeDrunkCheck();
+        addSnakeFasterCheck();
+        addSnakeSlowerCheck();
 
         SnakeGameApplication.getPrimaryStage().setOnCloseRequest((we -> {
             gameLoop.setRunning(false);
@@ -58,12 +60,49 @@ public class SingleplayerController implements Initializable {
     }
 
     private void addSnakeOnDoublePointsCheck() {
+        Label doublePointsLabel = createLabelWithColor("DOUBLE POINTS", Color.GOLDENROD);
         gameLoop.snakeOnDoublePoints.addListener((observableValue, oldValue, snakeOnDoublePoints) -> {
             if (snakeOnDoublePoints) {
-                scoreLabel.setTextFill(Color.GOLDENROD);
+                currentEffectsList.getChildren().add(doublePointsLabel);
             }
             else {
-                scoreLabel.setTextFill(Color.BLACK);
+                currentEffectsList.getChildren().remove(doublePointsLabel);
+            }
+        });
+    }
+
+    private void addSnakeDrunkCheck() {
+        Label drunkLabel = createLabelWithColor("DRUNK", Color.PURPLE);
+        gameLoop.snakeDrunk.addListener((observableValue, oldValue, snakeDrunk) -> {
+            if (snakeDrunk) {
+                currentEffectsList.getChildren().add(drunkLabel);
+            }
+            else {
+                currentEffectsList.getChildren().remove(drunkLabel);
+            }
+        });
+    }
+
+    private void addSnakeFasterCheck() {
+        Label snakeFasterLabel = createLabelWithColor("SPEED++", Color.YELLOW);
+        gameLoop.snakeFaster.addListener((observableValue, oldValue, snakeFaster) -> {
+            if (snakeFaster) {
+                currentEffectsList.getChildren().add(snakeFasterLabel);
+            }
+            else {
+                currentEffectsList.getChildren().remove(snakeFasterLabel);
+            }
+        });
+    }
+
+    private void addSnakeSlowerCheck() {
+        Label snakeSlowerLabel = createLabelWithColor("SPEED--", Color.DARKGREEN);
+        gameLoop.snakeSlower.addListener((observableValue, oldValue, snakeSlower) -> {
+            if (snakeSlower) {
+                currentEffectsList.getChildren().add(snakeSlowerLabel);
+            }
+            else {
+                currentEffectsList.getChildren().remove(snakeSlowerLabel);
             }
         });
     }
@@ -111,5 +150,12 @@ public class SingleplayerController implements Initializable {
         formattedTime += seconds;
 
         return formattedTime;
+    }
+
+    private Label createLabelWithColor(String textValue, Color color) {
+        Label label = new Label();
+        label.setText(textValue);
+        label.setTextFill(color);
+        return label;
     }
 }
