@@ -1,6 +1,7 @@
 package jku.mms.snakegame.model;
 
 import javafx.scene.paint.Color;
+import jku.mms.snakegame.model.collectibles.*;
 
 /**
  * A Tile is the base element of which the GameBoard is made.
@@ -41,8 +42,25 @@ public class Tile {
 
     public Collectible getCollectible() { return this.collectible; }
 
-    public void setCollectible() {
-        this.collectible = new Collectible(this);
+    public void setCollectible(CollectibleType collectibleType) {
+        Collectible newCollectible = null;
+
+        switch (collectibleType) {
+            case APPLE:
+                newCollectible = new Apple(this);
+                break;
+            case LIGHTNING:
+                newCollectible = new Lightning(this);
+                break;
+            case SNAIL:
+                newCollectible = new Snail(this);
+                break;
+            case DOUBLE_POINTS:
+                newCollectible = new DoublePoints(this);
+                break;
+        }
+
+        this.collectible = newCollectible;
     }
 
     public Tile convertToSnakeHead() {

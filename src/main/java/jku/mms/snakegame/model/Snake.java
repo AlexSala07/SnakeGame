@@ -1,5 +1,8 @@
 package jku.mms.snakegame.model;
 
+import jku.mms.snakegame.model.collectibles.Collectible;
+import jku.mms.snakegame.model.collectibles.CollectibleType;
+
 import java.util.LinkedList;
 
 /**
@@ -11,6 +14,9 @@ public class Snake {
     private Direction currentDirection = Direction.RIGHT;
     private final GameBoard gameBoard;
     private boolean collidedWithWall = false;
+    private int speed = 10;
+    private int pointsMultiplier = 1;
+    private boolean isOnEffect = false;
 
     public Snake(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
@@ -126,21 +132,92 @@ public class Snake {
     }
 
     public void eat() {
-        switch (this.currentDirection) {
-            case UP:
-                body.add(gameBoard.getTile(head.getColumn(), head.getRow() + 1));
-                break;
-            case DOWN:
-                body.add(gameBoard.getTile(head.getColumn(), head.getRow() - 1));
-                break;
-            case LEFT:
-                body.add(gameBoard.getTile(head.getColumn() + 1, head.getRow()));
-                break;
-            case RIGHT:
-                body.add(gameBoard.getTile(head.getColumn() - 1, head.getRow()));
-                break;
+        Collectible collectible = head.getCollectible();
+        if (collectible.getType().equals(CollectibleType.LIGHTNING) && !isOnEffect) {
+            new Thread(new SpeedThread(speed, speed + 15, 5000)).start();
+        }
+
+        if (collectible.getType().equals(CollectibleType.SNAIL) && !isOnEffect) {
+            new Thread(new SpeedThread(speed, speed - 5, 5000)).start();
+        }
+
+        if (collectible.getType().equals(CollectibleType.DOUBLE_POINTS)) {
+            new Thread(new DoublePointsThread(pointsMultiplier, 2, 5000)).start();
+        }
+
+        if (collectible.getType().equals(CollectibleType.APPLE)) {
+            switch (this.currentDirection) {
+                case UP:
+                    body.add(gameBoard.getTile(head.getColumn(), head.getRow() + 1));
+                    break;
+                case DOWN:
+                    body.add(gameBoard.getTile(head.getColumn(), head.getRow() - 1));
+                    break;
+                case LEFT:
+                    body.add(gameBoard.getTile(head.getColumn() + 1, head.getRow()));
+                    break;
+                case RIGHT:
+                    body.add(gameBoard.getTile(head.getColumn() - 1, head.getRow()));
+                    break;
+            }
         }
 
         head.removeCollectible();
+    }
+
+    public int getSpeed() { return this.speed; }
+
+    public boolean isOnEffect() { return this.isOnEffect; }
+
+    public int getPointsMultiplier() {
+        return this.pointsMultiplier;
+    }
+
+    public boolean isOnDoublePoints() {
+        return pointsMultiplier > 1;
+    }
+
+    private class SpeedThread implements Runnable {
+        private int oldSpeed;
+        private int newSpeed;
+        private int durationInMs;
+
+        SpeedThread(int oldSpeed, int newSpeed, int durationInMs) {
+            this.oldSpeed = oldSpeed;
+            this.newSpeed = newSpeed;
+            this.durationInMs = durationInMs;
+        }
+
+        @Override
+        public void run() {
+            long end = System.currentTimeMillis() + durationInMs;
+            while (System.currentTimeMillis() < end) {
+                speed = newSpeed;
+                isOnEffect = true;
+            }
+            speed = oldSpeed;
+            isOnEffect = false;
+        }
+    }
+
+    private class DoublePointsThread implements Runnable {
+        private int newPointsMultiplier;
+        private int oldPointsMultiplier;
+        private int durationInMs;
+
+        DoublePointsThread(int oldPointsMultiplier, int newPointsMultiplier, int durationInMs) {
+            this.oldPointsMultiplier = oldPointsMultiplier;
+            this.newPointsMultiplier = newPointsMultiplier;
+            this.durationInMs = durationInMs;
+        }
+
+        @Override
+        public void run() {
+            long end = System.currentTimeMillis() + durationInMs;
+            while (System.currentTimeMillis() < end) {
+                pointsMultiplier = newPointsMultiplier;
+            }
+            pointsMultiplier = oldPointsMultiplier;
+        }
     }
 }

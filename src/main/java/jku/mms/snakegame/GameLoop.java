@@ -4,6 +4,9 @@ import javafx.animation.AnimationTimer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.canvas.GraphicsContext;
+import jku.mms.snakegame.model.collectibles.CollectibleType;
+
+import java.util.Random;
 
 /**
  * The GameLoop keeps the game going.
@@ -11,11 +14,10 @@ import javafx.scene.canvas.GraphicsContext;
  * It should also refresh the Game UI with every loop.
  */
 public class GameLoop implements Runnable {
-    private static final int FRAMERATE = 10;
-    private static final float INTERVAL = 1000.0f / FRAMERATE;
+    public final BooleanProperty running = new SimpleBooleanProperty();
+    public final BooleanProperty snakeOnDoublePoints = new SimpleBooleanProperty();
     private final GameController gameController;
     private final Painter painter;
-    public final BooleanProperty running = new SimpleBooleanProperty();
     private boolean isKeyPressed = false;
 
     public GameLoop(GraphicsContext graphicsContext) {
@@ -41,7 +43,7 @@ public class GameLoop implements Runnable {
                     return;
                 }
 
-                if (now - lastTick > 1000000000 / 10) {
+                if (now - lastTick > 1000000000 / gameController.getSnakeSpeed()) {
                     lastTick = now;
                     tick();
                 }
@@ -59,9 +61,35 @@ public class GameLoop implements Runnable {
             running.set(false);
         }
 
+        if (gameController.snakeOnDoublePoints()) {
+            snakeOnDoublePoints.set(true);
+        }
+        else {
+            snakeOnDoublePoints.set(false);
+        }
+
+
+        generateRandomExtraCollectibles();
         refreshUi();
 
         isKeyPressed = false;
+    }
+
+    private void generateRandomExtraCollectibles() {
+        if (gameController.isSnakeOnEffect()) {
+            return;
+        }
+
+        Random random = new Random();
+        if (random.nextInt(225) == 10) {
+            gameController.generateRandomCollectible(CollectibleType.LIGHTNING);
+        }
+        if (random.nextInt(250) == 10) {
+            gameController.generateRandomCollectible(CollectibleType.SNAIL);
+        }
+        if (random.nextInt(325) == 10) {
+            gameController.generateRandomCollectible(CollectibleType.DOUBLE_POINTS);
+        }
     }
 
     public boolean getIsKeyPressed() { return this.isKeyPressed; }

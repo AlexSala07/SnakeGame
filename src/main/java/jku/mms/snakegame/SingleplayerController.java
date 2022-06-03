@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -37,6 +38,7 @@ public class SingleplayerController implements Initializable {
         gameLoopThread.start();
 
         addGameRunningCheck();
+        addSnakeOnDoublePointsCheck();
 
         SnakeGameApplication.getPrimaryStage().setOnCloseRequest((we -> {
             gameLoop.setRunning(false);
@@ -51,6 +53,17 @@ public class SingleplayerController implements Initializable {
         gameLoop.running.addListener((observableValue, oldValue, gameCurrentlyRunning) -> {
             if (!gameCurrentlyRunning) {
                 SceneController.showNewScene(Scene.GAME_END);
+            }
+        });
+    }
+
+    private void addSnakeOnDoublePointsCheck() {
+        gameLoop.snakeOnDoublePoints.addListener((observableValue, oldValue, snakeOnDoublePoints) -> {
+            if (snakeOnDoublePoints) {
+                scoreLabel.setTextFill(Color.GOLDENROD);
+            }
+            else {
+                scoreLabel.setTextFill(Color.BLACK);
             }
         });
     }

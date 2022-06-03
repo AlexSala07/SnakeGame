@@ -1,5 +1,8 @@
 package jku.mms.snakegame.model;
 
+import jku.mms.snakegame.model.collectibles.Collectible;
+import jku.mms.snakegame.model.collectibles.CollectibleType;
+
 import java.util.Random;
 
 import static jku.mms.snakegame.model.Tile.TILE_SIZE;
@@ -53,6 +56,19 @@ public class GameBoard {
 
     public int getRandomRow() {
         return new Random().nextInt(getColumns());
+    }
+
+    public boolean containsCollectible(CollectibleType collectibleType) {
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getColumns(); j++) {
+                Collectible tileCollectible = tileMap[i][j].getCollectible();
+
+                if(tileCollectible != null && tileCollectible.getType().equals(collectibleType)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

@@ -1,10 +1,10 @@
 package jku.mms.snakegame;
 
 import javafx.scene.canvas.GraphicsContext;
-import jku.mms.snakegame.model.Collectible;
+import jku.mms.snakegame.model.collectibles.Collectible;
 import jku.mms.snakegame.model.GameBoard;
 
-import static jku.mms.snakegame.model.Collectible.COLLECTIBLE_SIZE;
+import static jku.mms.snakegame.model.collectibles.Collectible.COLLECTIBLE_SIZE;
 import static jku.mms.snakegame.model.Tile.TILE_SIZE;
 
 /**
