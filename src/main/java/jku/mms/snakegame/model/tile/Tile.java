@@ -13,7 +13,7 @@ public class Tile {
     public static final int TILE_SIZE = 25;
     private final int row;
     private final int column;
-    private final TileType startType;
+    private TileType startType;
     private TileType type;
     private Collectible collectible;
 
@@ -35,6 +35,7 @@ public class Tile {
             case BACKGROUND_A: return Color.web("AAD751");
             case BACKGROUND_B: return Color.web("A2D149");
             case FOG: return Color.BLACK;
+            case WALL: return Color.DARKGRAY;
         }
         return Color.BLACK;
     }
@@ -75,7 +76,9 @@ public class Tile {
         }
 
         this.collectible = newCollectible;
-        new Thread(new RemoveCollectibleThread()).start();
+        if (!this.collectible.getType().equals(CollectibleType.APPLE)) {
+            new Thread(new RemoveCollectibleThread()).start();
+        }
     }
 
     public Tile convertToSnakeHead() {
@@ -95,6 +98,12 @@ public class Tile {
 
     public Tile convertToFog() {
         this.type = TileType.FOG;
+        return this;
+    }
+
+    public Tile convertToWall() {
+        this.type = TileType.WALL;
+        this.startType = TileType.WALL;
         return this;
     }
 

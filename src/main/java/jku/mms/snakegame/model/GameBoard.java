@@ -27,6 +27,7 @@ public class GameBoard {
         this.height = height;
         tileMap = new Tile[getRows()][getColumns()];
         setTileBackground();
+        generateRandomWall();
     }
 
     public int getRows() {
@@ -82,22 +83,6 @@ public class GameBoard {
         return false;
     }
 
-    /**
-     * Sets every Tile of the board to a green colour making up the background.
-     * This method should be called when the GameBoard is created.
-     */
-    private void setTileBackground() {
-        for (int i = 0; i < getRows(); i++) {
-            for (int j = 0; j < getColumns(); j++) {
-                if ((i + j) % 2 == 0) {
-                    tileMap[i][j] = new Tile(TileType.BACKGROUND_A, j, i);
-                } else {
-                    tileMap[i][j] = new Tile(TileType.BACKGROUND_B, j, i);
-                }
-            }
-        }
-    }
-
     public void createFog() {
         this.existsFog = true;
         List<Tile> tilesSurroundingSnake = snake.getSurroundingTiles();
@@ -105,7 +90,7 @@ public class GameBoard {
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getColumns(); j++) {
                 Tile tile = tileMap[i][j];
-                if (!tilesSurroundingSnake.contains(tile)) {
+                if (!tilesSurroundingSnake.contains(tile) && !tile.getType().equals(TileType.WALL)) {
                     tile.convertToFog();
                 }
             }
@@ -122,5 +107,40 @@ public class GameBoard {
             }
         }
         this.existsFog = false;
+    }
+
+    /**
+     * Sets every Tile of the board to a green colour making up the background.
+     * This method should be called when the GameBoard is created.
+     */
+    private void setTileBackground() {
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getColumns(); j++) {
+                if ((i + j) % 2 == 0) {
+                    tileMap[i][j] = new Tile(TileType.BACKGROUND_A, j, i);
+                } else {
+                    tileMap[i][j] = new Tile(TileType.BACKGROUND_B, j, i);
+                }
+            }
+        }
+    }
+
+    private void generateRandomWall() {
+        Random random = new Random();
+        int rowVariation = random.nextInt(100) % 2 == 0 ? 1 : -1;
+        int colVariation = random.nextInt(100) % 2 == 0 ? 1 : -1;
+
+        Tile baseTile;
+        do {
+            baseTile = getTile(getRandomCol(), getRandomRow());
+        } while(baseTile.getColumn() + 2 > getColumns() || baseTile.getRow() + 2 > getRows() ||
+                baseTile.getColumn() - 2 <= -1 || baseTile.getRow() - 2 <= -1);
+
+        baseTile.convertToWall();
+
+        getTile(baseTile.getColumn(), baseTile.getRow() + 1 * rowVariation).convertToWall();
+        getTile(baseTile.getColumn(), baseTile.getRow() + 2 * rowVariation).convertToWall();
+        getTile(baseTile.getColumn() + 1 * colVariation, baseTile.getRow()).convertToWall();
+        getTile(baseTile.getColumn() + 2 * colVariation, baseTile.getRow()).convertToWall();
     }
 }

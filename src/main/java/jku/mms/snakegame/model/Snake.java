@@ -56,7 +56,7 @@ public class Snake {
         if (this.currentDirection == Direction.DOWN) {
             return;
         }
-        if (head.getRow() - 1  <= -1){
+        if (head.getRow() - 1  <= -1 || gameBoard.getTile(head.getColumn(), head.getRow() - 1).getType().equals(TileType.WALL)){
             collidedWithWall = true;
             return;
         }
@@ -75,7 +75,7 @@ public class Snake {
         if (this.currentDirection == Direction.UP) {
             return;
         }
-        if (head.getRow() + 1 >= gameBoard.getColumns()){
+        if (head.getRow() + 1 >= gameBoard.getColumns() || gameBoard.getTile(head.getColumn(), head.getRow() + 1).getType().equals(TileType.WALL)){
             collidedWithWall = true;
             return;
         }
@@ -94,7 +94,7 @@ public class Snake {
         if (this.currentDirection == Direction.RIGHT) {
             return;
         }
-        if (head.getColumn() - 1 <= -1){
+        if (head.getColumn() - 1 <= -1 || gameBoard.getTile(head.getColumn() - 1, head.getRow()).getType().equals(TileType.WALL)) {
             collidedWithWall = true;
             return;
         }
@@ -113,7 +113,7 @@ public class Snake {
         if (this.currentDirection == Direction.LEFT) {
             return;
         }
-        if (head.getColumn() + 1 >= gameBoard.getRows()){
+        if (head.getColumn() + 1 >= gameBoard.getRows() || gameBoard.getTile(head.getColumn() + 1, head.getRow()).getType().equals(TileType.WALL)) {
             collidedWithWall = true;
             return;
         }

@@ -17,14 +17,13 @@ public class MenuController implements Initializable {
         SceneController.showNewScene(Scene.SINGLE_PLAYER);
     }
 
-    @FXML
+/*    @FXML
     protected void onStartMultiPlayerButtonClick() {
-        //TODO handle start multiplayer game
-    }
+    }*/
 
     @FXML
-    protected void onOptionsButtonClick() {
-        //TODO handle options menu
+    protected void onHelpButtonClick() {
+        SceneController.showNewScene(Scene.HELP);
     }
 
     @FXML

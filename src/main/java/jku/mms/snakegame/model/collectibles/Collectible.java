@@ -1,23 +1,23 @@
 package jku.mms.snakegame.model.collectibles;
 
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 import jku.mms.snakegame.model.tile.Tile;
 
 public abstract class Collectible {
-    public static final int COLLECTIBLE_SIZE = 10;
+    public static final int COLLECTIBLE_SIZE = 20;
     public static final int SELF_DESTRUCT_TIME_MS = 10000;
-    private Color color;
+    private Image image;
     private CollectibleType type;
     private Tile tile;
 
-    public Collectible(Tile tile, Color color, CollectibleType type) {
+    public Collectible(Tile tile, Image image, CollectibleType type) {
         this.tile = tile;
-        this.color = color;
+        this.image = image;
         this.type = type;
     }
 
-    public Color getColor() {
-        return color;
+    public Image getImage() {
+        return image;
     }
 
     public CollectibleType getType() { return type; }

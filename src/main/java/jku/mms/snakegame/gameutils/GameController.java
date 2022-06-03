@@ -73,7 +73,7 @@ public class GameController {
         Tile tile;
         do {
             tile = this.gameBoard.getTile(gameBoard.getRandomCol(), gameBoard.getRandomRow());
-        } while (tile.getCollectible() != null && (!tile.getType().equals(TileType.BACKGROUND_A) || !tile.getType().equals(TileType.BACKGROUND_B)));
+        } while (tile.getCollectible() != null && !(tile.getType().equals(TileType.BACKGROUND_A) || tile.getType().equals(TileType.BACKGROUND_B)));
 
         tile.setCollectible(collectibleType);
     }
