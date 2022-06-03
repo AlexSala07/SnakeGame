@@ -1,9 +1,10 @@
-package jku.mms.snakegame;
+package jku.mms.snakegame.javafxutils;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import jku.mms.snakegame.SnakeGameApplication;
 
 import java.io.IOException;
 

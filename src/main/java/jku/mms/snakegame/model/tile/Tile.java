@@ -1,4 +1,4 @@
-package jku.mms.snakegame.model;
+package jku.mms.snakegame.model.tile;
 
 import javafx.scene.paint.Color;
 import jku.mms.snakegame.model.collectibles.*;
@@ -13,18 +13,18 @@ public class Tile {
     public static final int TILE_SIZE = 25;
     private final int row;
     private final int column;
-    private final TyleType startType;
-    private TyleType type;
+    private final TileType startType;
+    private TileType type;
     private Collectible collectible;
 
-    public Tile(TyleType tyleType, int row, int column) {
-        this.startType = tyleType;
-        this.type = tyleType;
+    public Tile(TileType tileType, int row, int column) {
+        this.startType = tileType;
+        this.type = tileType;
         this.row = row;
         this.column = column;
     }
 
-    public TyleType getType() {
+    public TileType getType() {
         return type;
     }
 
@@ -79,12 +79,12 @@ public class Tile {
     }
 
     public Tile convertToSnakeHead() {
-        this.type = TyleType.SNAKE_HEAD;
+        this.type = TileType.SNAKE_HEAD;
         return this;
     }
 
     public Tile convertToSnakeBody() {
-        this.type = TyleType.SNAKE_BODY;
+        this.type = TileType.SNAKE_BODY;
         return this;
     }
 
@@ -94,7 +94,7 @@ public class Tile {
     }
 
     public Tile convertToFog() {
-        this.type = TyleType.FOG;
+        this.type = TileType.FOG;
         return this;
     }
 

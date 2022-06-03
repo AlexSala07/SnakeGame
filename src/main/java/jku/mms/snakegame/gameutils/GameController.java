@@ -1,12 +1,12 @@
-package jku.mms.snakegame;
+package jku.mms.snakegame.gameutils;
 
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import jku.mms.snakegame.model.GameBoard;
 import jku.mms.snakegame.model.Snake;
-import jku.mms.snakegame.model.Tile;
-import jku.mms.snakegame.model.TyleType;
+import jku.mms.snakegame.model.tile.Tile;
+import jku.mms.snakegame.model.tile.TileType;
 import jku.mms.snakegame.model.collectibles.CollectibleType;
 
 import static jku.mms.snakegame.SingleplayerController.CANVAS_HEIGHT;
@@ -73,7 +73,7 @@ public class GameController {
         Tile tile;
         do {
             tile = this.gameBoard.getTile(gameBoard.getRandomCol(), gameBoard.getRandomRow());
-        } while (tile.getCollectible() != null && (!tile.getType().equals(TyleType.BACKGROUND_A) || !tile.getType().equals(TyleType.BACKGROUND_B)));
+        } while (tile.getCollectible() != null && (!tile.getType().equals(TileType.BACKGROUND_A) || !tile.getType().equals(TileType.BACKGROUND_B)));
 
         tile.setCollectible(collectibleType);
     }

@@ -1,7 +1,6 @@
-package jku.mms.snakegame;
+package jku.mms.snakegame.gameutils;
 
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**

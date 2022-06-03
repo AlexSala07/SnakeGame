@@ -1,6 +1,8 @@
 package jku.mms.snakegame;
 
 import javafx.fxml.FXML;
+import jku.mms.snakegame.javafxutils.Scene;
+import jku.mms.snakegame.javafxutils.SceneController;
 
 public class GameEndController {
     @FXML

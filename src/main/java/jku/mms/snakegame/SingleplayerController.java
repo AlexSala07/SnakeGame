@@ -10,6 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import jku.mms.snakegame.gameutils.GameLoop;
+import jku.mms.snakegame.gameutils.KeyHandler;
+import jku.mms.snakegame.javafxutils.Scene;
+import jku.mms.snakegame.javafxutils.SceneController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,8 +24,8 @@ public class SingleplayerController implements Initializable {
     @FXML private Label timeLabel;
     @FXML private HBox currentEffectsList;
 
-    static final int CANVAS_WIDTH = 700;
-    static final int CANVAS_HEIGHT = 500;
+    public static final int CANVAS_WIDTH = 700;
+    public static final int CANVAS_HEIGHT = 500;
 
     private GameLoop gameLoop;
     private GraphicsContext gc;

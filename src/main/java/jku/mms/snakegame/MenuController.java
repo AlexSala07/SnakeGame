@@ -5,6 +5,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import jku.mms.snakegame.javafxutils.Scene;
+import jku.mms.snakegame.javafxutils.SceneController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -53,7 +55,7 @@ public class MenuController implements Initializable {
             imageFile = SnakeGameApplication.getMediaPlayer().isMute() ? "mute.png" : "volume.png";
         }
         
-        Image image = new Image(getClass().getResourceAsStream(imageFile));
+        Image image = new Image(getClass().getResourceAsStream("javafxutils/media/images/" +  imageFile));
         muteButton.setGraphic(new ImageView(image));
     }
 }

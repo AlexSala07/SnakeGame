@@ -1,18 +1,18 @@
-package jku.mms.snakegame;
+package jku.mms.snakegame.javafxutils;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
+import jku.mms.snakegame.SnakeGameApplication;
 
 public class SoundEffectController {
-    private static Media appleClip = new Media(SoundEffectController.class.getResource("apple.wav").toExternalForm());
-    private static Media doublePointsClip = new Media(SoundEffectController.class.getResource("doublePoints.wav").toExternalForm());
-    private static Media lightningClip = new Media(SoundEffectController.class.getResource("lightning.wav").toExternalForm());
-    private static Media snailClip = new Media(SoundEffectController.class.getResource("snail.wav").toExternalForm());
-    private static Media deadClip = new Media(SoundEffectController.class.getResource("dead.wav").toExternalForm());
-    private static Media drunkClip = new Media(SoundEffectController.class.getResource("drunk.wav").toExternalForm());
-    private static Media fogClip = new Media(SoundEffectController.class.getResource("fog.wav").toExternalForm());
-    private static Media blurClip = new Media(SoundEffectController.class.getResource("blur.wav").toExternalForm());
+    private static final Media appleClip = new Media(SoundEffectController.class.getResource("media/audio/apple.wav").toExternalForm());
+    private static final Media doublePointsClip = new Media(SoundEffectController.class.getResource("media/audio/doublePoints.wav").toExternalForm());
+    private static final Media lightningClip = new Media(SoundEffectController.class.getResource("media/audio/lightning.wav").toExternalForm());
+    private static final Media snailClip = new Media(SoundEffectController.class.getResource("media/audio/snail.wav").toExternalForm());
+    private static final Media deadClip = new Media(SoundEffectController.class.getResource("media/audio/dead.wav").toExternalForm());
+    private static final Media drunkClip = new Media(SoundEffectController.class.getResource("media/audio/drunk.wav").toExternalForm());
+    private static final Media fogClip = new Media(SoundEffectController.class.getResource("media/audio/fog.wav").toExternalForm());
+    private static final Media blurClip = new Media(SoundEffectController.class.getResource("media/audio/blur.wav").toExternalForm());
 
     public static void playAppleSound() {
         if (SnakeGameApplication.getMediaPlayer().isMute()) {

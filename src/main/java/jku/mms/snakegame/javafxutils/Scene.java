@@ -1,4 +1,4 @@
-package jku.mms.snakegame;
+package jku.mms.snakegame.javafxutils;
 
 public enum Scene {
     MENU("menu.fxml"), SINGLE_PLAYER("single-player.fxml"), GAME_END("game-end.fxml");
@@ -10,6 +10,6 @@ public enum Scene {
     }
 
     public String getFilePath() {
-        return filePath;
+        return "ui/" + filePath;
     }
 }

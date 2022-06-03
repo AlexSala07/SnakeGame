@@ -1,9 +1,11 @@
 package jku.mms.snakegame.model;
 
-import jku.mms.snakegame.SoundEffectController;
-import jku.mms.snakegame.model.collectibles.Blur;
+import jku.mms.snakegame.javafxutils.SoundEffectController;
+import jku.mms.snakegame.model.tile.Tile;
+import jku.mms.snakegame.model.tile.TileType;
 import jku.mms.snakegame.model.collectibles.Collectible;
 import jku.mms.snakegame.model.collectibles.CollectibleType;
+import jku.mms.snakegame.model.collectibles.threads.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -13,6 +15,7 @@ import java.util.List;
  * Snake represents the snake object which moves through the GameBoard and can eat Collectibles.
  */
 public class Snake {
+    private enum Direction { UP, DOWN, RIGHT, LEFT }
     private static final int DEFAULT_SPEED = 10;
     private Tile head;
     private final LinkedList<Tile> body = new LinkedList<>();
@@ -125,48 +128,36 @@ public class Snake {
         this.currentDirection = Direction.RIGHT;
     }
 
-    public boolean hasCollidedWithWall() {
-        return collidedWithWall;
-    }
-
-    public boolean hasCollidedWithItself() {
-        return body.stream().anyMatch(tile -> head.getColumn() == tile.getColumn() && head.getRow() == tile.getRow());
-    }
-
-    public boolean isHeadOnCollectible() {
-        return head.getCollectible() != null;
-    }
-
     public void eat() {
         Collectible collectible = head.getCollectible();
         if (collectible.getType().equals(CollectibleType.LIGHTNING) && !isOnSpeedEffect) {
             SoundEffectController.playLightningSound();
-            new Thread(new SpeedThread(speed, speed + 15, 5000)).start();
+            new Thread(new SpeedThread(this, speed + 15, 5000)).start();
         }
 
         if (collectible.getType().equals(CollectibleType.SNAIL) && !isOnSpeedEffect) {
             SoundEffectController.playSnailSound();
-            new Thread(new SpeedThread(speed, speed - 5, 5000)).start();
+            new Thread(new SpeedThread(this, speed - 5, 5000)).start();
         }
 
         if (collectible.getType().equals(CollectibleType.DOUBLE_POINTS)) {
             SoundEffectController.playDoublePointsSound();
-            new Thread(new DoublePointsThread(5000)).start();
+            new Thread(new DoublePointsThread(this, 5000)).start();
         }
 
         if (collectible.getType().equals(CollectibleType.WINE)) {
             SoundEffectController.playDrunkSound();
-            new Thread(new DrunkThread(5000)).start();
+            new Thread(new DrunkThread(this, 5000)).start();
         }
 
         if (collectible.getType().equals(CollectibleType.FOG)) {
             SoundEffectController.playFogSound();
-            new Thread(new FogThread(10000)).start();
+            new Thread(new FogThread(gameBoard, 10000)).start();
         }
 
         if (collectible.getType().equals(CollectibleType.BLUR)) {
             SoundEffectController.playBlurSound();
-            new Thread(new BlurThread(10000)).start();
+            new Thread(new BlurThread(gameBoard, 10000)).start();
         }
 
         if (collectible.getType().equals(CollectibleType.APPLE)) {
@@ -190,6 +181,18 @@ public class Snake {
         head.removeCollectible();
     }
 
+    public boolean hasCollidedWithWall() {
+        return collidedWithWall;
+    }
+
+    public boolean hasCollidedWithItself() {
+        return body.stream().anyMatch(tile -> head.getColumn() == tile.getColumn() && head.getRow() == tile.getRow());
+    }
+
+    public boolean isHeadOnCollectible() {
+        return head.getCollectible() != null;
+    }
+
     public int getSpeed() { return this.speed; }
 
     public boolean isOnSpeedEffect() { return this.isOnSpeedEffect; }
@@ -208,97 +211,20 @@ public class Snake {
 
     public boolean isSlower() { return speed < DEFAULT_SPEED; }
 
-    private class SpeedThread implements Runnable {
-        private int oldSpeed;
-        private int newSpeed;
-        private int durationInMs;
-
-        SpeedThread(int oldSpeed, int newSpeed, int durationInMs) {
-            this.oldSpeed = oldSpeed;
-            this.newSpeed = newSpeed;
-            this.durationInMs = durationInMs;
-        }
-
-        @Override
-        public void run() {
-            long end = System.currentTimeMillis() + durationInMs;
-            while (System.currentTimeMillis() < end) {
-                speed = newSpeed;
-                isOnSpeedEffect = true;
-            }
-            speed = oldSpeed;
-            isOnSpeedEffect = false;
-        }
+    public void setSpeed(int newSpeed) {
+        this.speed = newSpeed;
     }
 
-    private class DoublePointsThread implements Runnable {
-        private int durationInMs;
-
-        DoublePointsThread(int durationInMs) {
-            this.durationInMs = durationInMs;
-        }
-
-        @Override
-        public void run() {
-            long end = System.currentTimeMillis() + durationInMs;
-            while (System.currentTimeMillis() < end) {
-                pointsMultiplier = 2;
-            }
-            pointsMultiplier = 1;
-        }
+    public void setOnSpeedEffect(boolean state) {
+        this.isOnSpeedEffect = state;
     }
 
-    private class DrunkThread implements Runnable {
-        private int durationInMs;
-
-        DrunkThread(int durationInMs) {
-            this.durationInMs = durationInMs;
-        }
-
-        @Override
-        public void run() {
-            long end = System.currentTimeMillis() + durationInMs;
-            while (System.currentTimeMillis() < end) {
-                isDrunk = true;
-            }
-            isDrunk = false;
-        }
+    public void setPointsMultiplier(int multiplier) {
+        this.pointsMultiplier = multiplier;
     }
 
-    private class FogThread implements Runnable {
-        private int durationInMs;
-
-        FogThread(int durationInMs) {
-            this.durationInMs = durationInMs;
-        }
-
-        @Override
-        public void run() {
-            long end = System.currentTimeMillis() + durationInMs;
-            while (System.currentTimeMillis() < end) {
-                if(!gameBoard.existsFog()) {
-                    gameBoard.createFog();
-                }
-            }
-            gameBoard.clearFog();
-        }
-    }
-
-    private class BlurThread implements Runnable {
-        private int durationInMs;
-
-        BlurThread(int durationInMs) {
-            this.durationInMs = durationInMs;
-        }
-
-        @Override
-        public void run() {
-            long end = System.currentTimeMillis() + durationInMs;
-            while (System.currentTimeMillis() < end) {
-                gameBoard.setBlur(true);
-            }
-            gameBoard.setBlur(false);
-        }
+    public void setDrunk(boolean state) {
+        this.isDrunk = state;
     }
 
     public List<Tile> getSurroundingTiles() {
@@ -310,7 +236,7 @@ public class Snake {
                     // check tile is within boundaries
                     if(i < gameBoard.getColumns() && i > -1 && j < gameBoard.getRows() && j > -1) {
                         Tile surroundingTile = gameBoard.getTile(j, i);
-                        if (surroundingTile.getType().equals(TyleType.BACKGROUND_A) || surroundingTile.getType().equals(TyleType.BACKGROUND_B))
+                        if (surroundingTile.getType().equals(TileType.BACKGROUND_A) || surroundingTile.getType().equals(TileType.BACKGROUND_B))
                         {
                             tilesSurroundingSnake.add(surroundingTile);
                         }
@@ -326,7 +252,7 @@ public class Snake {
                         // check tile is within boundaries
                         if(i < gameBoard.getColumns() && i > -1 && j < gameBoard.getRows() && j > -1) {
                             Tile surroundingTile = gameBoard.getTile(j, i);
-                            if (surroundingTile.getType().equals(TyleType.BACKGROUND_A) || surroundingTile.getType().equals(TyleType.BACKGROUND_B))
+                            if (surroundingTile.getType().equals(TileType.BACKGROUND_A) || surroundingTile.getType().equals(TileType.BACKGROUND_B))
                             {
                                 tilesSurroundingSnake.add(surroundingTile);
                             }

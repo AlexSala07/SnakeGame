@@ -1,16 +1,15 @@
-package jku.mms.snakegame;
+package jku.mms.snakegame.gameutils;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.paint.Color;
-import jku.mms.snakegame.model.Tile;
-import jku.mms.snakegame.model.TyleType;
+import jku.mms.snakegame.model.tile.Tile;
+import jku.mms.snakegame.model.tile.TileType;
 import jku.mms.snakegame.model.collectibles.Collectible;
 import jku.mms.snakegame.model.GameBoard;
 
 import static jku.mms.snakegame.model.collectibles.Collectible.COLLECTIBLE_SIZE;
-import static jku.mms.snakegame.model.Tile.TILE_SIZE;
+import static jku.mms.snakegame.model.tile.Tile.TILE_SIZE;
 
 /**
  * The Painter class takes care of drawing the GameBoard and making the game state visible to the player.
@@ -38,7 +37,7 @@ public class Painter {
                 Collectible tileCollectible = tileToPaint.getCollectible();
 
                 if (tileCollectible != null) {
-                    graphicsContext.setFill(tileToPaint.getType().equals(TyleType.FOG) ? Color.BLACK : tileCollectible.getColor());
+                    graphicsContext.setFill(tileToPaint.getType().equals(TileType.FOG) ? Color.BLACK : tileCollectible.getColor());
                     graphicsContext.fillRect((row * TILE_SIZE) + (TILE_SIZE / 3), (col * TILE_SIZE) + (TILE_SIZE / 3), COLLECTIBLE_SIZE, COLLECTIBLE_SIZE);
                 }
             }

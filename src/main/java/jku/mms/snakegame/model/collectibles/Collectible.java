@@ -1,7 +1,7 @@
 package jku.mms.snakegame.model.collectibles;
 
 import javafx.scene.paint.Color;
-import jku.mms.snakegame.model.Tile;
+import jku.mms.snakegame.model.tile.Tile;
 
 public abstract class Collectible {
     public static final int COLLECTIBLE_SIZE = 10;

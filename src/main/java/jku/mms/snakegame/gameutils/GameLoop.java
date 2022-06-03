@@ -1,9 +1,10 @@
-package jku.mms.snakegame;
+package jku.mms.snakegame.gameutils;
 
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.canvas.GraphicsContext;
+import jku.mms.snakegame.javafxutils.SoundEffectController;
 import jku.mms.snakegame.model.collectibles.CollectibleType;
 
 import java.util.Random;
