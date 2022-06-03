@@ -1,7 +1,5 @@
 package jku.mms.snakegame.model;
 
-import javafx.scene.paint.Color;
-
 import static jku.mms.snakegame.model.Tile.TILE_SIZE;
 
 /**
@@ -12,6 +10,7 @@ public class GameBoard {
     private final int width;
     private final int height;
     private final Tile[][] tileMap;
+    private Snake snake;
 
     public GameBoard(int width, int height) {
         this.width = width;
@@ -28,14 +27,22 @@ public class GameBoard {
         return height / TILE_SIZE;
     }
 
-    public Tile getTile(int row, int column) {
-        Tile foundTile = tileMap[row][column];
+    public Tile getTile(int column, int row) {
+        Tile foundTile = tileMap[column][row];
 
         if (foundTile == null) {
             throw new NullPointerException("No Tile with the coordinates { row: " + row + " column: " + column + " } exist for this gameboard.");
         }
 
         return foundTile;
+    }
+
+    public Snake getSnake() {
+        return snake;
+    }
+
+    public void setSnake(Snake snake) {
+        this.snake = snake;
     }
 
     /**
@@ -46,9 +53,9 @@ public class GameBoard {
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getColumns(); j++) {
                 if ((i + j) % 2 == 0) {
-                    tileMap[i][j] = new Tile(TyleType.BACKGROUND, Color.web("AAD751"));
+                    tileMap[i][j] = new Tile(TyleType.BACKGROUND_A, j, i);
                 } else {
-                    tileMap[i][j] = new Tile(TyleType.BACKGROUND, Color.web("A2D149"));
+                    tileMap[i][j] = new Tile(TyleType.BACKGROUND_B, j, i);
                 }
             }
         }
