@@ -128,16 +128,16 @@ public class Snake {
     public void eat() {
         switch (this.currentDirection) {
             case UP:
-                body.add(gameBoard.getTile(body.getFirst().getColumn(), body.getFirst().getRow() + 1));
+                body.add(gameBoard.getTile(head.getColumn(), head.getRow() + 1));
                 break;
             case DOWN:
-                body.add(gameBoard.getTile(body.getFirst().getColumn(), body.getFirst().getRow() - 1));
+                body.add(gameBoard.getTile(head.getColumn(), head.getRow() - 1));
                 break;
             case LEFT:
-                body.add(gameBoard.getTile(body.getFirst().getColumn() + 1, body.getFirst().getRow()));
+                body.add(gameBoard.getTile(head.getColumn() + 1, head.getRow()));
                 break;
             case RIGHT:
-                body.add(gameBoard.getTile(body.getFirst().getColumn() - 1, body.getFirst().getRow()));
+                body.add(gameBoard.getTile(head.getColumn() - 1, head.getRow()));
                 break;
         }
 

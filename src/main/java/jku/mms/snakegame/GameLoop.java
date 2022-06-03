@@ -1,5 +1,6 @@
 package jku.mms.snakegame;
 
+import javafx.animation.AnimationTimer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.canvas.GraphicsContext;
@@ -15,12 +16,10 @@ public class GameLoop implements Runnable {
     private final GameController gameController;
     private final Painter painter;
     public final BooleanProperty running = new SimpleBooleanProperty();
-    private boolean paused;
     private boolean isKeyPressed = false;
 
     public GameLoop(GraphicsContext graphicsContext) {
         this.running.set(true);
-        this.paused = false;
         gameController = new GameController();
         painter = new Painter(graphicsContext);
         painter.paintGameBoard(gameController.getGameBoard());
@@ -28,33 +27,41 @@ public class GameLoop implements Runnable {
 
     @Override
     public void run() {
-        while (running.get() && !paused) {
-            float time = System.currentTimeMillis();
+        new AnimationTimer() {
+            long lastTick = 0;
 
-            // in order to avoid moving the snake twice in the same direction, thus skipping one tile
-            if (!isKeyPressed) {
-                gameController.moveSnake();
-            }
+            public void handle(long now) {
+                if(!running.get()) {
+                    stop();
+                }
 
-            if (gameController.collisionDetected()) {
-               running.set(false);
-            }
+                if (lastTick == 0) {
+                    lastTick = now;
+                    tick();
+                    return;
+                }
 
-            refreshUi();
-
-            isKeyPressed = false;
-
-            time = System.currentTimeMillis() - time;
-
-            if (time < INTERVAL) {
-                try {
-                    // Make frame rate consistent
-                    Thread.sleep((long) (INTERVAL - time));
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
+                if (now - lastTick > 1000000000 / 10) {
+                    lastTick = now;
+                    tick();
                 }
             }
+
+        }.start();
+    }
+
+    private void tick() {
+        if (!isKeyPressed) {
+            gameController.moveSnake();
         }
+
+        if (gameController.collisionDetected()) {
+            running.set(false);
+        }
+
+        refreshUi();
+
+        isKeyPressed = false;
     }
 
     public boolean getIsKeyPressed() { return this.isKeyPressed; }
