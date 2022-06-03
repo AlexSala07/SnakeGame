@@ -1,42 +1,60 @@
 package jku.mms.snakegame;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.stage.Stage;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import jku.mms.snakegame.javafxutils.Scene;
+import jku.mms.snakegame.javafxutils.SceneController;
 
-import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MenuController {
+public class MenuController implements Initializable {
     @FXML
     protected void onStartSinglePlayerButtonClick() {
-        showNewScene("single-player.fxml");
+        SceneController.showNewScene(Scene.SINGLE_PLAYER);
     }
 
-    @FXML
+/*    @FXML
     protected void onStartMultiPlayerButtonClick() {
-        //TODO handle start multiplayer game
-    }
+    }*/
 
     @FXML
-    protected void onOptionsButtonClick() {
-        //TODO handle options menu
+    protected void onHelpButtonClick() {
+        SceneController.showNewScene(Scene.HELP);
     }
 
     @FXML
     protected void onExitGameButtonClick() {
-        //TODO handle exit game
+        SceneController.exitGame();
     }
 
-    public static void showNewScene(String fxmlFileName) {
-        Parent fxmlLoader;
-        try {
-            fxmlLoader = FXMLLoader.load(MenuController.class.getResource(fxmlFileName));
-            Stage primaryStage = SnakeGameApplication.getPrimaryStage();
-            primaryStage.getScene().setRoot(fxmlLoader);
+    @FXML Button muteButton;
 
-        } catch (IOException e) {
-            e.printStackTrace();
+    @FXML
+    protected void onMuteButtonClick() {
+        SnakeGameApplication.getMediaPlayer().setMute(!SnakeGameApplication.getMediaPlayer().isMute());
+        setMuteButtonImage();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setMuteButtonImage();
+    }
+
+    private void setMuteButtonImage() {
+        String imageFile;
+
+        if (SnakeGameApplication.getMediaPlayer() == null) {
+            imageFile = "volume.png";
         }
+        else {
+            imageFile = SnakeGameApplication.getMediaPlayer().isMute() ? "mute.png" : "volume.png";
+        }
+        
+        Image image = new Image(getClass().getResourceAsStream("javafxutils/media/images/" +  imageFile));
+        muteButton.setGraphic(new ImageView(image));
     }
 }
