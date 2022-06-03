@@ -7,9 +7,15 @@
 <?import javafx.scene.canvas.Canvas?>
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="10"
       fx:controller="jku.mms.snakegame.SingleplayerController">
-    <HBox>
-        <Label text="Score: "/>
-        <Label text="Time: "/>
+    <HBox alignment="CENTER" spacing="200">
+        <HBox >
+            <Label text="Score: "/>
+            <Label fx:id="scoreLabel"/>
+        </HBox>
+        <HBox>
+            <Label text="Time: "/>
+            <Label fx:id="timeLabel"/>
+        </HBox>
     </HBox>
     <HBox alignment="CENTER">
         <Canvas fx:id="gameCanvas"/>

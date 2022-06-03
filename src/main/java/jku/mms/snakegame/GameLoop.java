@@ -8,12 +8,13 @@ import javafx.scene.canvas.GraphicsContext;
  * It should also refresh the Game UI with every loop.
  */
 public class GameLoop implements Runnable {
-    private static final int FRAMERATE = 20;
+    private static final int FRAMERATE = 10;
     private static final float INTERVAL = 1000.0f / FRAMERATE;
     private final GameController gameController;
     private final Painter painter;
     private boolean running;
     private boolean paused;
+    private boolean isKeyPressed = false;
 
     public GameLoop(GraphicsContext graphicsContext) {
         this.running = true;
@@ -28,7 +29,18 @@ public class GameLoop implements Runnable {
         while (running && !paused) {
             float time = System.currentTimeMillis();
 
+            // in order to avoid moving the snake twice in the same direction, thus skipping one tile
+            if (!isKeyPressed) {
+                gameController.moveSnake();
+            }
+
+            if (gameController.collisionDetected()) {
+               running = false;
+            }
+
             refreshUi();
+
+            isKeyPressed = false;
 
             time = System.currentTimeMillis() - time;
 
@@ -43,10 +55,21 @@ public class GameLoop implements Runnable {
         }
     }
 
+    public boolean getIsKeyPressed() { return this.isKeyPressed; }
+
+    public void setIsKeyPressed(boolean state) { this.isKeyPressed = state; }
+
+    public GameController getGameController() { return this.gameController; }
+
+    public boolean isRunning() { return this.running; }
+
+    public void setRunning(boolean flag) { this.running = flag; }
+
     private void refreshUi() {
         if (painter == null || gameController == null) {
             throw new NullPointerException("UI Refreshing not possible as either Painter or GameController are null.");
         }
         painter.paintGameBoard(gameController.getGameBoard());
     }
+
 }

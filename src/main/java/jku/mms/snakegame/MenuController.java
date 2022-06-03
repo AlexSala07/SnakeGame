@@ -28,10 +28,10 @@ public class MenuController {
         //TODO handle exit game
     }
 
-    private void showNewScene(String fxmlFileName) {
+    public static void showNewScene(String fxmlFileName) {
         Parent fxmlLoader;
         try {
-            fxmlLoader = FXMLLoader.load(getClass().getResource(fxmlFileName));
+            fxmlLoader = FXMLLoader.load(MenuController.class.getResource(fxmlFileName));
             Stage primaryStage = SnakeGameApplication.getPrimaryStage();
             primaryStage.getScene().setRoot(fxmlLoader);
 

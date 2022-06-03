@@ -1,5 +1,5 @@
 package jku.mms.snakegame.model;
 
 public enum TyleType {
-    BACKGROUND, SNAKE, COLLECTIBLE
+    BACKGROUND_A, BACKGROUND_B, SNAKE_HEAD, SNAKE_BODY, COLLECTIBLE
 }
