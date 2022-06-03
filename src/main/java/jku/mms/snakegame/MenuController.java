@@ -1,16 +1,11 @@
 package jku.mms.snakegame;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class MenuController {
     @FXML
     protected void onStartSinglePlayerButtonClick() {
-        showNewScene("single-player.fxml");
+        SceneController.showNewScene(Scene.SINGLE_PLAYER);
     }
 
     @FXML
@@ -25,18 +20,6 @@ public class MenuController {
 
     @FXML
     protected void onExitGameButtonClick() {
-        //TODO handle exit game
-    }
-
-    public static void showNewScene(String fxmlFileName) {
-        Parent fxmlLoader;
-        try {
-            fxmlLoader = FXMLLoader.load(MenuController.class.getResource(fxmlFileName));
-            Stage primaryStage = SnakeGameApplication.getPrimaryStage();
-            primaryStage.getScene().setRoot(fxmlLoader);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneController.exitGame();
     }
 }

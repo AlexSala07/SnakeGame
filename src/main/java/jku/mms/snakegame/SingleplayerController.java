@@ -2,6 +2,9 @@ package jku.mms.snakegame;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -33,18 +36,23 @@ public class SingleplayerController implements Initializable {
         Thread gameLoopThread = new Thread(gameLoop);
         gameLoopThread.start();
 
-        Thread gameLoopRunningCheckThread = new Thread(() -> {
-            while (gameLoop.isRunning()) {
-                // show game end scene only after the game has stopped
-            }
-            MenuController.showNewScene("menu.fxml");
-        });
-        gameLoopRunningCheckThread.start();
+        addGameRunningCheck();
 
-        SnakeGameApplication.getPrimaryStage().setOnCloseRequest((we -> gameLoop.setRunning(false)));
+        SnakeGameApplication.getPrimaryStage().setOnCloseRequest((we -> {
+            gameLoop.setRunning(false);
+            SceneController.exitGame();
+        }));
         scoreLabel.textProperty().bind(gameLoop.getGameController().scoreProperty.asString());
 
         startTimer();
+    }
+
+    private void addGameRunningCheck() {
+        gameLoop.running.addListener((observableValue, oldValue, gameCurrentlyRunning) -> {
+            if (!gameCurrentlyRunning) {
+                SceneController.showNewScene(Scene.GAME_END);
+            }
+        });
     }
 
     private void startTimer() {
@@ -67,7 +75,7 @@ public class SingleplayerController implements Initializable {
         gc = gameCanvas.getGraphicsContext2D();
     }
 
-    public static String formatSeconds(int timeInSeconds) {
+    private String formatSeconds(int timeInSeconds) {
         int hours = timeInSeconds / 3600;
         int secondsLeft = timeInSeconds - hours * 3600;
         int minutes = secondsLeft / 60;

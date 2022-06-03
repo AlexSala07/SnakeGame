@@ -14,6 +14,7 @@ public class Snake {
 
     public Snake(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
+
         head = gameBoard.getTile(5, 5).convertToSnakeHead();
         body.add(gameBoard.getTile(4, 5).convertToSnakeBody());
         body.add(gameBoard.getTile(3, 5).convertToSnakeBody());

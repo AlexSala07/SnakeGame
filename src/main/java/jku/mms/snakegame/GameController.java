@@ -6,8 +6,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import jku.mms.snakegame.model.GameBoard;
 import jku.mms.snakegame.model.Snake;
 
-import java.util.Random;
-
 import static jku.mms.snakegame.SingleplayerController.CANVAS_HEIGHT;
 import static jku.mms.snakegame.SingleplayerController.CANVAS_WIDTH;
 
@@ -65,11 +63,7 @@ public class GameController {
             throw new NullPointerException("Random collectible generation failed because gameboard is null");
         }
 
-        Random random = new Random();
-        int randomRow = random.nextInt(getGameBoard().getColumns());
-        int randomCol = random.nextInt(getGameBoard().getRows());
-
-        this.gameBoard.getTile(randomCol, randomRow).setCollectible();
+        this.gameBoard.getTile(gameBoard.getRandomCol(), gameBoard.getRandomRow()).setCollectible();
     }
 
     private void snakeEatIfPossible() {

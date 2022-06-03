@@ -1,5 +1,7 @@
 package jku.mms.snakegame;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -12,12 +14,12 @@ public class GameLoop implements Runnable {
     private static final float INTERVAL = 1000.0f / FRAMERATE;
     private final GameController gameController;
     private final Painter painter;
-    private boolean running;
+    public final BooleanProperty running = new SimpleBooleanProperty();
     private boolean paused;
     private boolean isKeyPressed = false;
 
     public GameLoop(GraphicsContext graphicsContext) {
-        this.running = true;
+        this.running.set(true);
         this.paused = false;
         gameController = new GameController();
         painter = new Painter(graphicsContext);
@@ -26,7 +28,7 @@ public class GameLoop implements Runnable {
 
     @Override
     public void run() {
-        while (running && !paused) {
+        while (running.get() && !paused) {
             float time = System.currentTimeMillis();
 
             // in order to avoid moving the snake twice in the same direction, thus skipping one tile
@@ -35,7 +37,7 @@ public class GameLoop implements Runnable {
             }
 
             if (gameController.collisionDetected()) {
-               running = false;
+               running.set(false);
             }
 
             refreshUi();
@@ -61,9 +63,9 @@ public class GameLoop implements Runnable {
 
     public GameController getGameController() { return this.gameController; }
 
-    public boolean isRunning() { return this.running; }
+    public boolean isRunning() { return this.running.get(); }
 
-    public void setRunning(boolean flag) { this.running = flag; }
+    public void setRunning(boolean flag) { this.running.set(flag); }
 
     private void refreshUi() {
         if (painter == null || gameController == null) {

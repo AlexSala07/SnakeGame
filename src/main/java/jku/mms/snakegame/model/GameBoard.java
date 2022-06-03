@@ -1,5 +1,7 @@
 package jku.mms.snakegame.model;
 
+import java.util.Random;
+
 import static jku.mms.snakegame.model.Tile.TILE_SIZE;
 
 /**
@@ -43,6 +45,14 @@ public class GameBoard {
 
     public void setSnake(Snake snake) {
         this.snake = snake;
+    }
+
+    public int getRandomCol() {
+        return new Random().nextInt(getRows());
+    }
+
+    public int getRandomRow() {
+        return new Random().nextInt(getColumns());
     }
 
     /**

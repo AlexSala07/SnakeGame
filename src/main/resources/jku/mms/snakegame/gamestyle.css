@@ -11,6 +11,7 @@
     -fx-font-size: 10pt;
     -fx-background-color: -background-color-primary;
     -fx-text-fill: -text-color-primary;
+    -fx-min-width: 100px;
 }
 
 .borderPane {
