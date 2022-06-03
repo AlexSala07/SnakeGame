@@ -77,22 +77,24 @@ public class GameLoop implements Runnable {
     }
 
     private void generateRandomExtraCollectibles() {
-        if (gameController.isSnakeOnSpeedEffect()) {
-            return;
-        }
-
         Random random = new Random();
-        if (random.nextInt(225) == 10) {
+        if (random.nextInt(225) == 10 && !gameController.isSnakeOnSpeedEffect()) {
             gameController.generateRandomCollectible(CollectibleType.LIGHTNING);
         }
-        if (random.nextInt(250) == 10) {
+        if (random.nextInt(250) == 10 && !gameController.isSnakeOnSpeedEffect()) {
             gameController.generateRandomCollectible(CollectibleType.SNAIL);
         }
-        if (random.nextInt(325) == 10) {
+        if (random.nextInt(325) == 10 && !gameController.isSnakeOnDoublePoints()) {
             gameController.generateRandomCollectible(CollectibleType.DOUBLE_POINTS);
         }
-        if (random.nextInt(250) == 10) {
+        if (random.nextInt(250) == 10 && !gameController.isSnakeDrunk()) {
             gameController.generateRandomCollectible(CollectibleType.WINE);
+        }
+        if (random.nextInt(275) == 10 && !gameController.getGameBoard().existsFog()) {
+            gameController.generateRandomCollectible(CollectibleType.FOG);
+        }
+        if (random.nextInt(275) == 10 && !gameController.getGameBoard().existsBlur()) {
+            gameController.generateRandomCollectible(CollectibleType.BLUR);
         }
     }
 

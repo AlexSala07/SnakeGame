@@ -73,9 +73,9 @@ public class GameController {
         Tile tile;
         do {
             tile = this.gameBoard.getTile(gameBoard.getRandomCol(), gameBoard.getRandomRow());
-        } while (tile.getCollectible() != null && (tile.getType().equals(TyleType.BACKGROUND_A) || !tile.getType().equals(TyleType.BACKGROUND_B)));
+        } while (tile.getCollectible() != null && (!tile.getType().equals(TyleType.BACKGROUND_A) || !tile.getType().equals(TyleType.BACKGROUND_B)));
 
-        this.gameBoard.getTile(gameBoard.getRandomCol(), gameBoard.getRandomRow()).setCollectible(collectibleType);
+        tile.setCollectible(collectibleType);
     }
 
     private void snakeEatIfPossible() {

@@ -5,6 +5,7 @@ import jku.mms.snakegame.model.Tile;
 
 public abstract class Collectible {
     public static final int COLLECTIBLE_SIZE = 10;
+    public static final int SELF_DESTRUCT_TIME_MS = 10000;
     private Color color;
     private CollectibleType type;
     private Tile tile;

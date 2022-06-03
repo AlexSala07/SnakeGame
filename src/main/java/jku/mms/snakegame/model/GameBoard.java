@@ -3,6 +3,7 @@ package jku.mms.snakegame.model;
 import jku.mms.snakegame.model.collectibles.Collectible;
 import jku.mms.snakegame.model.collectibles.CollectibleType;
 
+import java.util.List;
 import java.util.Random;
 
 import static jku.mms.snakegame.model.Tile.TILE_SIZE;
@@ -16,6 +17,8 @@ public class GameBoard {
     private final int height;
     private final Tile[][] tileMap;
     private Snake snake;
+    private boolean existsFog = false;
+    private boolean existsBlur = false;
 
     public GameBoard(int width, int height) {
         this.width = width;
@@ -58,6 +61,12 @@ public class GameBoard {
         return new Random().nextInt(getColumns());
     }
 
+    public boolean existsFog() { return this.existsFog; }
+
+    public boolean existsBlur() { return this.existsBlur; }
+
+    public void setBlur(boolean state) { this.existsBlur = state; }
+
     public boolean containsCollectible(CollectibleType collectibleType) {
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getColumns(); j++) {
@@ -85,5 +94,31 @@ public class GameBoard {
                 }
             }
         }
+    }
+
+    public void createFog() {
+        this.existsFog = true;
+        List<Tile> tilesSurroundingSnake = snake.getSurroundingTiles();
+
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getColumns(); j++) {
+                Tile tile = tileMap[i][j];
+                if (!tilesSurroundingSnake.contains(tile)) {
+                    tile.convertToFog();
+                }
+            }
+        }
+    }
+
+    public void clearFog() {
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getColumns(); j++) {
+                Tile tile = tileMap[i][j];
+                if (tile.getType().equals(TyleType.FOG)) {
+                    tile.convertToStartType();
+                }
+            }
+        }
+        this.existsFog = false;
     }
 }

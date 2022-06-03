@@ -1,6 +1,11 @@
 package jku.mms.snakegame;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.paint.Color;
+import jku.mms.snakegame.model.Tile;
+import jku.mms.snakegame.model.TyleType;
 import jku.mms.snakegame.model.collectibles.Collectible;
 import jku.mms.snakegame.model.GameBoard;
 
@@ -24,13 +29,16 @@ public class Painter {
 
         for (int row = 0; row < gameBoard.getRows(); row++) {
             for (int col = 0; col < gameBoard.getColumns(); col++) {
-                graphicsContext.setFill(gameBoard.getTile(row, col).getColor());
+                Tile tileToPaint = gameBoard.getTile(row, col);
+
+                graphicsContext.setEffect(gameBoard.existsBlur() ? new GaussianBlur(30) : null);
+                graphicsContext.setFill(tileToPaint.getColor());
                 graphicsContext.fillRect(row * TILE_SIZE, col * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
-                Collectible tileCollectible = gameBoard.getTile(row, col).getCollectible();
+                Collectible tileCollectible = tileToPaint.getCollectible();
 
                 if (tileCollectible != null) {
-                    graphicsContext.setFill(tileCollectible.getColor());
+                    graphicsContext.setFill(tileToPaint.getType().equals(TyleType.FOG) ? Color.BLACK : tileCollectible.getColor());
                     graphicsContext.fillRect((row * TILE_SIZE) + (TILE_SIZE / 3), (col * TILE_SIZE) + (TILE_SIZE / 3), COLLECTIBLE_SIZE, COLLECTIBLE_SIZE);
                 }
             }

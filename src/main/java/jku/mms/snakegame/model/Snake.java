@@ -1,10 +1,13 @@
 package jku.mms.snakegame.model;
 
 import jku.mms.snakegame.SoundEffectController;
+import jku.mms.snakegame.model.collectibles.Blur;
 import jku.mms.snakegame.model.collectibles.Collectible;
 import jku.mms.snakegame.model.collectibles.CollectibleType;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Snake represents the snake object which moves through the GameBoard and can eat Collectibles.
@@ -156,6 +159,16 @@ public class Snake {
             new Thread(new DrunkThread(5000)).start();
         }
 
+        if (collectible.getType().equals(CollectibleType.FOG)) {
+            SoundEffectController.playFogSound();
+            new Thread(new FogThread(10000)).start();
+        }
+
+        if (collectible.getType().equals(CollectibleType.BLUR)) {
+            SoundEffectController.playBlurSound();
+            new Thread(new BlurThread(10000)).start();
+        }
+
         if (collectible.getType().equals(CollectibleType.APPLE)) {
             SoundEffectController.playAppleSound();
             switch (this.currentDirection) {
@@ -250,5 +263,79 @@ public class Snake {
             }
             isDrunk = false;
         }
+    }
+
+    private class FogThread implements Runnable {
+        private int durationInMs;
+
+        FogThread(int durationInMs) {
+            this.durationInMs = durationInMs;
+        }
+
+        @Override
+        public void run() {
+            long end = System.currentTimeMillis() + durationInMs;
+            while (System.currentTimeMillis() < end) {
+                if(!gameBoard.existsFog()) {
+                    gameBoard.createFog();
+                }
+            }
+            gameBoard.clearFog();
+        }
+    }
+
+    private class BlurThread implements Runnable {
+        private int durationInMs;
+
+        BlurThread(int durationInMs) {
+            this.durationInMs = durationInMs;
+        }
+
+        @Override
+        public void run() {
+            long end = System.currentTimeMillis() + durationInMs;
+            while (System.currentTimeMillis() < end) {
+                gameBoard.setBlur(true);
+            }
+            gameBoard.setBlur(false);
+        }
+    }
+
+    public List<Tile> getSurroundingTiles() {
+        List<Tile> tilesSurroundingSnake = new ArrayList<>();
+
+        for(int i = head.getRow()-1; i <= head.getRow()+1; i++) {
+            for(int j = head.getColumn()-1; j <= head.getColumn()+1; j++) {
+                if(i != head.getRow() || j != head.getColumn()) { //ignore the center tile
+                    // check tile is within boundaries
+                    if(i < gameBoard.getColumns() && i > -1 && j < gameBoard.getRows() && j > -1) {
+                        Tile surroundingTile = gameBoard.getTile(j, i);
+                        if (surroundingTile.getType().equals(TyleType.BACKGROUND_A) || surroundingTile.getType().equals(TyleType.BACKGROUND_B))
+                        {
+                            tilesSurroundingSnake.add(surroundingTile);
+                        }
+                    }
+                }
+            }
+        }
+
+        body.forEach(t -> {
+            for(int i = t.getRow()-1; i <= t.getRow()+1; i++) {
+                for(int j = t.getColumn()-1; j <= t.getColumn()+1; j++) {
+                    if(i != t.getRow() || j != t.getColumn()) { //ignore the center tile
+                        // check tile is within boundaries
+                        if(i < gameBoard.getColumns() && i > -1 && j < gameBoard.getRows() && j > -1) {
+                            Tile surroundingTile = gameBoard.getTile(j, i);
+                            if (surroundingTile.getType().equals(TyleType.BACKGROUND_A) || surroundingTile.getType().equals(TyleType.BACKGROUND_B))
+                            {
+                                tilesSurroundingSnake.add(surroundingTile);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        return tilesSurroundingSnake;
     }
 }

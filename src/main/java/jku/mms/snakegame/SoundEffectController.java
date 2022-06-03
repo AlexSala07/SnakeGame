@@ -11,6 +11,8 @@ public class SoundEffectController {
     private static Media snailClip = new Media(SoundEffectController.class.getResource("snail.wav").toExternalForm());
     private static Media deadClip = new Media(SoundEffectController.class.getResource("dead.wav").toExternalForm());
     private static Media drunkClip = new Media(SoundEffectController.class.getResource("drunk.wav").toExternalForm());
+    private static Media fogClip = new Media(SoundEffectController.class.getResource("fog.wav").toExternalForm());
+    private static Media blurClip = new Media(SoundEffectController.class.getResource("blur.wav").toExternalForm());
 
     public static void playAppleSound() {
         if (SnakeGameApplication.getMediaPlayer().isMute()) {
@@ -58,6 +60,22 @@ public class SoundEffectController {
         }
 
         createMediaPlayer(drunkClip).play();
+    }
+
+    public static void playFogSound() {
+        if (SnakeGameApplication.getMediaPlayer().isMute()) {
+            return;
+        }
+
+        createMediaPlayer(fogClip).play();
+    }
+
+    public static void playBlurSound() {
+        if (SnakeGameApplication.getMediaPlayer().isMute()) {
+            return;
+        }
+
+        createMediaPlayer(blurClip).play();
     }
 
     private static MediaPlayer createMediaPlayer(Media clipToPlay) {
